@@ -1,17 +1,51 @@
-[project]
+# This file is used to configure the Poetry package manager for Python projects.
+# It defines the project metadata, dependencies, and other settings.
+# https://python-poetry.org/docs/pyproject/
+# https://medium.com/@akshatgadodia/diving-into-pyproject-toml-configuring-your-python-project-with-poetry-acabf7398e7a
+
+
+# Poetry metadata
+[tool.poetry]
 name = "quiz"
 version = "0.1.0"
 description = "Quiz app with Poetry, Streamlit, FastAPI and SQLAlchemy"
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    "Marvin L <marrvinn@users.noreply.github.com>",
 ]
+license="MIT"
 readme = "README.md"
-requires-python = ">=3.9"
-dependencies = [
-    "fastapi (>=0.115.12,<0.116.0)"
+packages = [
+    {include = "quiz", from = "src"},
 ]
 
 
+# Build system requirements and backend for resolving dependencies
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+# Source for fetching package “repositories”
+[[tool.poetry.source]]
+name = "pypi"
+priority = "primary"
+
+
+# Main dependencies
+[tool.poetry.dependencies]
+python = ">=3.9,<3.10"
+poetry = ">=2.0.1"
+
+
+# Dev dependencies
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+ruff = "^0.11.6"
+pytest = "^8.3.5"
+pre-commit = "^4.2.0"
+
+
+# further stuff
