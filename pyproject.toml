@@ -42,10 +42,107 @@ poetry = ">=2.0.1"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-black = "^25.1.0"
-ruff = "^0.11.6"
-pytest = "^8.3.5"
-pre-commit = "^4.2.0"
+mypy = ">=1.13.0"
+pre-commit = ">=3.0.4"
+pytest = ">=6.2.5"
+pytest-cov = ">=2.12.1"
+ruff = "0.9.2"
 
 
-# further stuff
+# Stubs dependencies
+[tool.poetry.group.stubs]
+optional = true
+
+[tool.poetry.group.stubs.dependencies]
+types-python-dateutil = ">=2.8.19.14"
+types-pytz = ">=2023.3.1.1"
+types-requests = ">=2.31.0.0"
+
+
+# Docs dependencies
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+pydata-sphinx-theme = ">=0.12.0"
+sphinx = "<6"
+
+
+# Paths for pytest
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+# Omit tests for estimation of source code covered with tests
+[tool.coverage.run]
+omit = [
+    "tests/*"
+]
+
+
+# Ruff Settings
+# https://docs.astral.sh/ruff/configuration/
+[tool.ruff]
+target-version = "py39"
+line-length = 88
+exclude = ["docs"]
+
+[tool.ruff.format]
+quote-style = "single"
+exclude = ["docs"]
+
+[tool.ruff.lint]
+preview = true
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "N",   # PEP8 naming convetions
+    "D",   # pydocstyle
+]
+ignore = [
+    "B023",  # function-uses-loop-variable
+    "C901",  # complex-structure
+    "D418",  # overload-with-docstring
+    "F811",  # redefined-while-unused
+    "N806",  # non-lowercase-variable-in-function
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = ["F401"]  # Ignore unused and re-export imports
+"tests/**" = ["D"]  # Ignore pydocstyle for tests
+"tests/**/*.py" = ["E402", "F401"]  # Ignore unused import for tests
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+mypy_path = "src"
+check_untyped_defs = true
+disallow_any_generics = true
+ignore_missing_imports = true
+implicit_reexport = true
+no_implicit_optional = true
+show_error_codes = true
+strict_equality = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+
+[tool.interrogate]
+ignore-magic = true
+ignore-semiprivate = true
+ignore-private = true
+ignore-property-decorators = true
+ignore-module = true
+ignore-nested-functions = true
+ignore-nested-classes = true
+ignore-setters = true
