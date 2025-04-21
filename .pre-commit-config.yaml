@@ -7,6 +7,8 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+      - id: check-added-large-files
+        args: [ --maxkb=1000 ]
 
   # Ruff linter hooks
   - repo: https://github.com/astral-sh/ruff-pre-commit
@@ -14,7 +16,18 @@ repos:
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix, --show-fixes ]
+        types_or: [python, pyi]
       - id: ruff-format
+        types_or: [python, pyi]
+
+  # Interrogate hooks to check code coverage
+  - repo: https://github.com/econchick/interrogate
+    rev: 1.7.0
+    hooks:
+      - id: interrogate
+        exclude: 'tests/.*|docs/.*'
+        args: [ --fail-under=80, --verbose ]
+        additional_dependencies: [ setuptools ]
 
   # Numpydoc hooks to ensure numpy docstring standard
   - repo: https://github.com/numpy/numpydoc
@@ -22,3 +35,24 @@ repos:
     hooks:
       - id: numpydoc-validation
         exclude: (tests|docs)/.*
+
+  # Black code formatter hooks
+  - repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+      - id: black
+
+    # MyPy type checker hooks
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.910
+    hooks:
+      - id: mypy
+        files: ^src/
+        args: [ --non-interactive, --install-types, --ignore-missing-imports ]
+        additional_dependencies: [ boto3-stubs ]
+
+    # isort hooks to sort imports
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.9.3
+    hooks:
+      - id: isort
