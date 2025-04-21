@@ -1,3 +1,4 @@
+# https://stefaniemolin.com/articles/devx/pre-commit/setup-guide/
 repos:
   # Genereal pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
