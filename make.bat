@@ -16,7 +16,7 @@ ECHO "UNKNOWN COMMAND"
 goto end
 
 :: Setup
-:setup-dev
+:setup_dev
 python -m pip install --upgrade pip
 python -m pip install --upgrade poetry
 python -m poetry sync --with dev,stubs
@@ -24,7 +24,7 @@ pre-commit install
 goto end
 
 :: Tests
-:run-tests
+:run_tests
 python -m pip install --upgrade pip
 python -m pip install --upgrade poetry
 python -m poetry sync --with dev,stubs
