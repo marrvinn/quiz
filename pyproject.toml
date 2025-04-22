@@ -30,6 +30,8 @@ streamlit = ">=0.73.0"
 fastapi = "^0.115.12"
 psycopg2-binary = "^2.9.10"
 python-dotenv = "^1.1.0"
+greenlet = "3.2.1"
+sqlalchemy = "^2.0.40"
 
 [tool.poetry.group.dev]
 optional = true
