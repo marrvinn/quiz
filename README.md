@@ -1,2 +1,2 @@
 # quiz
-Quiz App with Poetry, Streamlit, FastAPI and SQLAlchemy
+Quiz Application with Poetry, Streamlit, FastAPI and SQLAlchemy
