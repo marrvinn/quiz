@@ -1,0 +1,103 @@
+@startuml
+
+title "Quiz App - UML Diagramm (Streamlit + FastAPI + SQLAlchemy)"
+
+skinparam classAttributeIconSize 0
+
+package "UI Layer (Streamlit)" {
+    class QuizUI {
+        + show_questions(): None
+        + submit_answer(question_id: int, answer: str): None
+        + show_results(): None
+    }
+}
+
+package "API Layer (FastAPI)" {
+    class QuizRouter {
+        + get_questions(): List[QuestionRead]
+        + post_answer(ans: UserAnswerCreate): UserAnswerRead
+    }
+
+    class UserRouter {
+        + post_user(user: UserCreate): UserRead
+    }
+}
+
+package "Pydantic Schemas" {
+    class UserCreate {
+        + username: str
+        + email: str
+    }
+    class UserRead {
+        + id: int
+        + username: str
+        + email: str
+    }
+    class QuestionRead {
+        + id: int
+        + text: str
+        + choices: List[str]
+    }
+    class UserAnswerCreate {
+        + question_id: int
+        + answer: str
+    }
+    class UserAnswerRead {
+        + id: int
+        + question_id: int
+        + user_id: int
+        + is_correct: bool
+    }
+}
+
+package "Service Layer" {
+    class QuizService {
+        + get_all_questions(): List[Question]
+        + check_answer(user: User, question: Question, answer: str): UserAnswer
+    }
+    class UserService {
+        + create_user(data: UserCreate): User
+        + get_user(id: int): User
+    }
+}
+
+package "Models (SQLAlchemy)" {
+    class User {
+        - id: int
+        - username: str
+        - email: str
+    }
+    class Question {
+        - id: int
+        - text: str
+        - choices: JSON
+        - correct_answer: str
+    }
+    class UserAnswer {
+        - id: int
+        - question_id: int
+        - user_id: int
+        - answer: str
+        - is_correct: bool
+    }
+    class QuizResult {
+        - id: int
+        - user_id: int
+        - total_score: int
+    }
+}
+
+User "1" -- "0..*" UserAnswer
+Question "1" -- "0..*" UserAnswer
+User "1" -- "0..1" QuizResult
+
+QuizRouter --> QuizService
+UserRouter --> UserService
+QuizService --> Question
+QuizService --> UserAnswer
+UserService --> User
+
+UserAnswerCreate --> UserAnswerRead
+UserCreate --> UserRead
+
+@enduml
