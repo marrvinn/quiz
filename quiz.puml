@@ -20,6 +20,7 @@ package "API Layer (FastAPI)" {
 
     class UserRouter {
         + post_user(user: UserCreate): UserRead
+        + post_login(username: str, password: str): UserRead
     }
 }
 
@@ -48,16 +49,25 @@ package "Pydantic Schemas" {
         + user_id: int
         + is_correct: bool
     }
+    class UserLogin {
+        + username: str
+        + password: str
+    }
+    class Token {
+        + access_token: str
+        + token_type: str
+    }
 }
 
 package "Service Layer" {
-    class QuizService {
-        + get_all_questions(): List[Question]
-        + check_answer(user: User, question: Question, answer: str): UserAnswer
-    }
     class UserService {
         + create_user(data: UserCreate): User
         + get_user(id: int): User
+        + authenticate_user(username: str, password: str): User
+    }
+    class QuizService {
+        + get_all_questions(): List[Question]
+        + check_answer(user: User, question: Question, answer: str): UserAnswer
     }
 }
 
@@ -91,10 +101,15 @@ User "1" -- "0..*" UserAnswer
 Question "1" -- "0..*" UserAnswer
 User "1" -- "0..1" QuizResult
 
+QuizUI --> QuizRouter
+QuizUI --> UserRouter
 QuizRouter --> QuizService
 UserRouter --> UserService
+
 QuizService --> Question
 QuizService --> UserAnswer
+QuizService --> QuizResult
+
 UserService --> User
 
 UserAnswerCreate --> UserAnswerRead
